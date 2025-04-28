@@ -27,7 +27,8 @@ export default class FaturamentoServices {
 
   async getFaturamento() {
     try {
-      const faturamento = path.join('D:/App/AdventureForge/Faturamento.xlsx');
+      const faturamento = path.join('C:/Arquivos Fundnova/BACKEND/Faturamento.xlsx');
+      // const faturamento = path.join('D:/App/AdventureForge/Faturamento.xlsx');
       const wb = XLSX.readFile(faturamento);
       
       const sheetName = wb.SheetNames[1];

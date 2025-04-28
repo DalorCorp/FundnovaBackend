@@ -162,7 +162,7 @@ export default class RefugoServices {
   
   async getRefugoKg() {
     try {
-      const filePath = path.join('D:/App/AdventureForge/REFUGO.xlsm');
+      const filePath = path.join('C:/Arquivos Fundnova/BACKEND/REFUGO.xlsm');
       const workbook = XLSX.readFile(filePath);
 
       const refugoSheet = workbook.Sheets[workbook.SheetNames[4]];
