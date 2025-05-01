@@ -31,8 +31,6 @@ export default class RefugoServices {
 
         const [yearStr, monthStr, dayStr] = date.split("-");
         const year = parseInt(yearStr);
-        if (year < 2025) return null; // 🔵 Filter here to avoid 2024 and earlier
-
         const month = this.monthNames[parseInt(monthStr) - 1];
         const day = parseInt(dayStr);
         const refugo = Number(row["KG_TT"] || 0);
@@ -51,8 +49,6 @@ export default class RefugoServices {
 
         const [yearStr, monthStr, dayStr] = date.split("-");
         const year = parseInt(yearStr);
-        if (year < 2025) return null; // 🔵 Filter here to avoid 2024 and earlier
-
         const month = this.monthNames[parseInt(monthStr) - 1];
         const day = parseInt(dayStr);
         const refugo = Number(row["QTE_REF"] || 0);
@@ -71,8 +67,6 @@ export default class RefugoServices {
 
         const [yearStr, monthStr, dayStr] = date.split("-");
         const year = parseInt(yearStr);
-        if (year < 2025) return null; // 🔵 Filter here to avoid 2024 and earlier
-
         const month = this.monthNames[parseInt(monthStr) - 1];
         const day = parseInt(dayStr);
         const producao = Number(row[" KG_TT "] || 0);
@@ -91,8 +85,6 @@ export default class RefugoServices {
 
         const [yearStr, monthStr, dayStr] = date.split("-");
         const year = parseInt(yearStr);
-        if (year < 2025) return null; // 🔵 Filter here to avoid 2024 and earlier
-
         const month = this.monthNames[parseInt(monthStr) - 1];
         const day = parseInt(dayStr);
         const producao = Number(row["QTE_PÇ"] || 0);
@@ -104,11 +96,11 @@ export default class RefugoServices {
 
   private mergeByDate(refugos: KgRefugo[], producoes: KgProducao[]): KgMergedData[] {
     const map = new Map<string, KgMergedData>();
-
+  
     function getKey(year: number, month: string, day: number): string {
       return `${year}-${month}-${day}`;
     }
-
+  
     for (const r of refugos) {
       const key = getKey(r.year, r.month, r.day);
       if (map.has(key)) {
@@ -124,7 +116,7 @@ export default class RefugoServices {
         });
       }
     }
-
+  
     for (const p of producoes) {
       const key = getKey(p.year, p.month, p.day);
       if (map.has(key)) {
@@ -140,34 +132,34 @@ export default class RefugoServices {
         });
       }
     }
-
+  
     for (const entry of map.values()) {
       entry.razao = entry.producao !== 0 ? 100 * (entry.refugo / entry.producao) : 0;
     }
-
+  
     return Array.from(map.values());
   }
 
   async getRefugo() {
     try {
-      const refugoKg = await this.getRefugoKg();
-      const refugoQt = await this.getRefugoQt();
-      const merged = { refugoKg, refugoQt };
-      return {
-        type: null,
-        status: 200,
-        message: merged
-      };
-    } catch (error) {
-      console.error("Error processing Excel file:", error);
-      return {
-        type: "error",
-        status: 500,
-        message: "Erro ao processar o arquivo Excel"
-      };
-    }
+      const refugoKg = await this.getRefugoKg()
+      const refugoQt = await this.getRefugoQt()
+      const merged = {refugoKg, refugoQt}
+    return {
+      type: null,
+      status: 200,
+      message: merged
+    };
+  } catch (error) {
+    console.error("Error processing Excel file:", error);
+    return {
+      type: "error",
+      status: 500,
+      message: "Erro ao processar o arquivo Excel"
+    };
   }
-
+}
+  
   async getRefugoKg() {
     try {
       const filePath = path.join('C:/Arquivos Fundnova/BACKEND/REFUGO.xlsm');
@@ -180,7 +172,8 @@ export default class RefugoServices {
       const producaoData = this.parseSheetToProducao(producaoSheet);
 
       const merged = this.mergeByDate(refugoData, producaoData);
-      return merged; // 🔵 Filtering moved earlier, so this is already filtered
+
+      return merged
     } catch (error) {
       console.error("Error processing Excel file:", error);
       return {
@@ -203,7 +196,8 @@ export default class RefugoServices {
       const producaoData = this.parseSheetToProducaoQt(producaoSheet);
 
       const merged = this.mergeByDate(refugoData, producaoData);
-      return merged; // 🔵 Filtering moved earlier, so this is already filtered
+
+      return merged
     } catch (error) {
       console.error("Error processing Excel file:", error);
       return {

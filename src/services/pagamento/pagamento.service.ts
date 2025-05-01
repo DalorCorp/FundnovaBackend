@@ -27,7 +27,7 @@ export default class PagamentoServices {
 
   async getPagamento() {
     try {
-      const pagamento = path.join('C:/Arquivos Fundnova/BACKEND/PAGAMENTO.xlsx');
+      const pagamento = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/FATURAMENTO/PAGAMENTO.xlsx');
       const wb = XLSX.readFile(pagamento);
       
       const sheetName = wb.SheetNames[1];
