@@ -22,69 +22,81 @@ export default class RefugoServices {
     return isNaN(date.getTime()) ? null : date.toISOString().split("T")[0];
   }
 
-  // 🔵 Added skipRows param + range option
-  private parseSheetToRefugo(sheet: XLSX.Sheet, skipRows = 0): KgRefugo[] {
-    const rawData = XLSX.utils.sheet_to_json(sheet, { range: skipRows }); // 🔵
+  private parseSheetToRefugo(sheet: XLSX.Sheet): KgRefugo[] {
+    const rawData = XLSX.utils.sheet_to_json(sheet);
     return (rawData as any[])
       .map((row) => {
         const date = row["DT_FUSÃO"] ? this.excelDateToJSDate(row["DT_FUSÃO"]) : null;
         if (!date) return null;
+
         const [yearStr, monthStr, dayStr] = date.split("-");
         const year = parseInt(yearStr);
+        if (year < 2025) return null; // 🔵 Filter here to avoid 2024 and earlier
+
         const month = this.monthNames[parseInt(monthStr) - 1];
         const day = parseInt(dayStr);
         const refugo = Number(row["KG_TT"] || 0);
+
         return { year, month, day, refugo };
       })
       .filter((entry): entry is KgRefugo => !!entry);
   }
 
-  // 🔵 Added skipRows param + range option
-  private parseSheetToRefugoQt(sheet: XLSX.Sheet, skipRows = 0): KgRefugo[] {
-    const rawData = XLSX.utils.sheet_to_json(sheet, { range: skipRows }); // 🔵
+  private parseSheetToRefugoQt(sheet: XLSX.Sheet): KgRefugo[] {
+    const rawData = XLSX.utils.sheet_to_json(sheet);
     return (rawData as any[])
       .map((row) => {
         const date = row["DT_FUSÃO"] ? this.excelDateToJSDate(row["DT_FUSÃO"]) : null;
         if (!date) return null;
+
         const [yearStr, monthStr, dayStr] = date.split("-");
         const year = parseInt(yearStr);
+        if (year < 2025) return null; // 🔵 Filter here to avoid 2024 and earlier
+
         const month = this.monthNames[parseInt(monthStr) - 1];
         const day = parseInt(dayStr);
         const refugo = Number(row["QTE_REF"] || 0);
+
         return { year, month, day, refugo };
       })
       .filter((entry): entry is KgRefugo => !!entry);
   }
 
-  // 🔵 Added skipRows param + range option
-  private parseSheetToProducao(sheet: XLSX.Sheet, skipRows = 0): KgProducao[] {
-    const rawData = XLSX.utils.sheet_to_json(sheet, { range: skipRows }); // 🔵
+  private parseSheetToProducao(sheet: XLSX.Sheet): KgProducao[] {
+    const rawData = XLSX.utils.sheet_to_json(sheet);
     return (rawData as any[])
       .map((row) => {
         const date = row["DT_FUSÃO"] ? this.excelDateToJSDate(row["DT_FUSÃO"]) : null;
         if (!date) return null;
+
         const [yearStr, monthStr, dayStr] = date.split("-");
         const year = parseInt(yearStr);
+        if (year < 2025) return null; // 🔵 Filter here to avoid 2024 and earlier
+
         const month = this.monthNames[parseInt(monthStr) - 1];
         const day = parseInt(dayStr);
         const producao = Number(row[" KG_TT "] || 0);
+
         return { year, month, day, producao };
       })
       .filter((entry): entry is KgProducao => !!entry);
   }
 
-  // 🔵 Added skipRows param + range option
-  private parseSheetToProducaoQt(sheet: XLSX.Sheet, skipRows = 0): KgProducao[] {
-    const rawData = XLSX.utils.sheet_to_json(sheet, { range: skipRows }); // 🔵
+  private parseSheetToProducaoQt(sheet: XLSX.Sheet): KgProducao[] {
+    const rawData = XLSX.utils.sheet_to_json(sheet);
     return (rawData as any[])
       .map((row) => {
         const date = row["DT_FUSÃO"] ? this.excelDateToJSDate(row["DT_FUSÃO"]) : null;
         if (!date) return null;
+
         const [yearStr, monthStr, dayStr] = date.split("-");
         const year = parseInt(yearStr);
+        if (year < 2025) return null; // 🔵 Filter here to avoid 2024 and earlier
+
         const month = this.monthNames[parseInt(monthStr) - 1];
         const day = parseInt(dayStr);
         const producao = Number(row["QTE_PÇ"] || 0);
+
         return { year, month, day, producao };
       })
       .filter((entry): entry is KgProducao => !!entry);
@@ -92,9 +104,11 @@ export default class RefugoServices {
 
   private mergeByDate(refugos: KgRefugo[], producoes: KgProducao[]): KgMergedData[] {
     const map = new Map<string, KgMergedData>();
+
     function getKey(year: number, month: string, day: number): string {
       return `${year}-${month}-${day}`;
     }
+
     for (const r of refugos) {
       const key = getKey(r.year, r.month, r.day);
       if (map.has(key)) {
@@ -110,6 +124,7 @@ export default class RefugoServices {
         });
       }
     }
+
     for (const p of producoes) {
       const key = getKey(p.year, p.month, p.day);
       if (map.has(key)) {
@@ -125,9 +140,11 @@ export default class RefugoServices {
         });
       }
     }
+
     for (const entry of map.values()) {
       entry.razao = entry.producao !== 0 ? 100 * (entry.refugo / entry.producao) : 0;
     }
+
     return Array.from(map.values());
   }
 
@@ -155,16 +172,15 @@ export default class RefugoServices {
     try {
       const filePath = path.join('C:/Arquivos Fundnova/BACKEND/REFUGO.xlsm');
       const workbook = XLSX.readFile(filePath);
+
       const refugoSheet = workbook.Sheets[workbook.SheetNames[4]];
       const producaoSheet = workbook.Sheets[workbook.SheetNames[5]];
 
-      // 🔵 Pass skipRows = 4 (or however many rows you want to skip)
-      const refugoData = this.parseSheetToRefugo(refugoSheet, 4); // 🔵
-      const producaoData = this.parseSheetToProducao(producaoSheet, 4); // 🔵
+      const refugoData = this.parseSheetToRefugo(refugoSheet);
+      const producaoData = this.parseSheetToProducao(producaoSheet);
 
       const merged = this.mergeByDate(refugoData, producaoData);
-      const filtered = merged.filter(entry => entry.year >= 2025);
-      return filtered;
+      return merged; // 🔵 Filtering moved earlier, so this is already filtered
     } catch (error) {
       console.error("Error processing Excel file:", error);
       return {
@@ -179,16 +195,15 @@ export default class RefugoServices {
     try {
       const filePath = path.join('C:/Arquivos Fundnova/BACKEND/REFUGO.xlsm');
       const workbook = XLSX.readFile(filePath);
+
       const refugoSheet = workbook.Sheets[workbook.SheetNames[4]];
       const producaoSheet = workbook.Sheets[workbook.SheetNames[5]];
 
-      // 🔵 Pass skipRows = 4
-      const refugoData = this.parseSheetToRefugoQt(refugoSheet, 4); // 🔵
-      const producaoData = this.parseSheetToProducaoQt(producaoSheet, 4); // 🔵
+      const refugoData = this.parseSheetToRefugoQt(refugoSheet);
+      const producaoData = this.parseSheetToProducaoQt(producaoSheet);
 
       const merged = this.mergeByDate(refugoData, producaoData);
-      const filtered = merged.filter(entry => entry.year >= 2025);
-      return filtered;
+      return merged; // 🔵 Filtering moved earlier, so this is already filtered
     } catch (error) {
       console.error("Error processing Excel file:", error);
       return {
