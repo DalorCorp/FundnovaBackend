@@ -3,7 +3,8 @@ const fs = require('fs'); // Import the fs (File System) module
 const path = require('path'); // Import the path module
 
 // Define the path to the Excel file
-const pagamento = 'D:/App/AdventureForge/PAGAMENTO.xlsx';
+const pagamento = 'C:/Arquivos Fundnova/BACKEND/PAGAMENTO.xlsx';
+// const pagamento = 'D:/App/AdventureForge/PAGAMENTO.xlsx';
 
 // Read the Excel file from the given path
 const readExcelFile = (pagamento) => {
