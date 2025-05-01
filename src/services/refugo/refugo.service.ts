@@ -59,7 +59,7 @@ export default class RefugoServices {
   }
 
   private parseSheetToProducao(sheet: XLSX.Sheet): KgProducao[] {
-    const rawData = XLSX.utils.sheet_to_json(sheet);
+    const rawData = XLSX.utils.sheet_to_json(sheet, { range: 3, defval: null });
     return (rawData as any[])
       .map((row) => {
         const date = row["DT_FUSÃO"] ? this.excelDateToJSDate(row["DT_FUSÃO"]) : null;
@@ -77,7 +77,7 @@ export default class RefugoServices {
   }
 
   private parseSheetToProducaoQt(sheet: XLSX.Sheet): KgProducao[] {
-    const rawData = XLSX.utils.sheet_to_json(sheet);
+    const rawData = XLSX.utils.sheet_to_json(sheet, { range: 3, defval: null });
     return (rawData as any[])
       .map((row) => {
         const date = row["DT_FUSÃO"] ? this.excelDateToJSDate(row["DT_FUSÃO"]) : null;
@@ -162,7 +162,7 @@ export default class RefugoServices {
   
   async getRefugoKg() {
     try {
-      const filePath = path.join('C:/Arquivos Fundnova/BACKEND/REFUGO.xlsm');
+      const filePath = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/REFUGO/_REFUGO.xlsm');
       const workbook = XLSX.readFile(filePath);
 
       const refugoSheet = workbook.Sheets[workbook.SheetNames[4]];
@@ -172,8 +172,8 @@ export default class RefugoServices {
       const producaoData = this.parseSheetToProducao(producaoSheet);
 
       const merged = this.mergeByDate(refugoData, producaoData);
-
-      return merged
+      const filtered = merged.filter(entry => entry.year >= 2025);
+      return filtered;
     } catch (error) {
       console.error("Error processing Excel file:", error);
       return {
@@ -186,7 +186,7 @@ export default class RefugoServices {
 
   async getRefugoQt() {
     try {
-      const filePath = path.join('C:/Arquivos Fundnova/BACKEND/REFUGO.xlsm');
+      const filePath = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/REFUGO/_REFUGO.xlsm');
       const workbook = XLSX.readFile(filePath);
 
       const refugoSheet = workbook.Sheets[workbook.SheetNames[4]];
@@ -196,8 +196,8 @@ export default class RefugoServices {
       const producaoData = this.parseSheetToProducaoQt(producaoSheet);
 
       const merged = this.mergeByDate(refugoData, producaoData);
-
-      return merged
+      const filtered = merged.filter(entry => entry.year >= 2025);
+      return filtered;
     } catch (error) {
       console.error("Error processing Excel file:", error);
       return {

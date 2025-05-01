@@ -27,49 +27,43 @@ export default class FaturamentoServices {
 
   async getFaturamento() {
     try {
-      const faturamento = path.join('C:/Arquivos Fundnova/BACKEND/Faturamento.xlsx');
-      // const faturamento = path.join('D:/App/AdventureForge/Faturamento.xlsx');
+      const faturamento = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/FATURAMENTO/FATURAMENTO_DIÁRIO.xlsx');
       const wb = XLSX.readFile(faturamento);
-      
-      const sheetName = wb.SheetNames[1];
-      const ws = wb.Sheets[sheetName];
+      const faturamentoSheet = wb.SheetNames[1];
+      const ws = wb.Sheets[faturamentoSheet];
   
-      const data = XLSX.utils.sheet_to_json(ws);
+      const headerRowIndex = 1;
   
-      const filteredData = data.map((row: any) => {
-        const fullDate = row["DATA"] ? this.excelDateToJSDate(row["DATA"]) : null;
-        
-        const [year, month, day] = fullDate ? fullDate.split("-") : [null, null, null];
-        
-        const monthName = month ? this.monthNames[parseInt(month) - 1] : null;
+      const data = XLSX.utils.sheet_to_json(ws, { range: headerRowIndex, defval: null });
   
-        return {
-          year: year ? parseInt(year) : null,
-          month: monthName,
-          day: day ? parseInt(day) : null,
-          kg: row[" KG "] || 0,
-          price: row[" R$ "] || 0,
-          result: row["R$/KG"] || 0
-        };
-      });
-
+      const filteredData = data
+        .filter((row: any) =>
+          row["DATA"] && row[" KG "] != null && row[" R$ "] != null && row["R$/KG"] != null
+        )
+        .map((row: any) => {
+          const fullDate = this.excelDateToJSDate(row["DATA"]);
+          const [year, month, day] = fullDate!.split("-");
+  
+          return {
+            year: parseInt(year),
+            month: this.monthNames[parseInt(month) - 1],
+            day: parseInt(day),
+            kg: row[" KG "],
+            price: row[" R$ "],
+            result: row["R$/KG"]
+          };
+        });
+  
       filteredData.sort((a, b) => {
-        const yearA = a.year ?? 0;
-        const yearB = b.year ?? 0;
-      
-        if (yearA !== yearB) return yearB - yearA;
-      
-        const monthIndexA = a.month ? this.monthNames.indexOf(a.month) : -1;
-        const monthIndexB = b.month ? this.monthNames.indexOf(b.month) : -1;
-      
-        if (monthIndexA !== monthIndexB) return monthIndexA - monthIndexB;
-      
-        const dayA = a.day ?? 0;
-        const dayB = b.day ?? 0;
-      
-        return dayA - dayB;
+        const yearDiff = (b.year ?? 0) - (a.year ?? 0);
+        if (yearDiff !== 0) return yearDiff;
+  
+        const monthDiff = this.monthNames.indexOf(b.month) - this.monthNames.indexOf(a.month);
+        if (monthDiff !== 0) return monthDiff;
+  
+        return (b.day ?? 0) - (a.day ?? 0);
       });
-
+  
       return {
         type: null,
         status: 200,
@@ -84,4 +78,5 @@ export default class FaturamentoServices {
       };
     }
   }
+  
 }
