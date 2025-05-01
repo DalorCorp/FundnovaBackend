@@ -27,7 +27,7 @@ export default class FaturamentoServices {
 
   async getFaturamento() {
     try {
-      const faturamento = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/FATURAMENTO/FATURAMENTO_DIÁRIO.xlsx');
+      const faturamento = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/FATURAMENTO/FATURAMENTO DIÁRIO.xlsx');
       const wb = XLSX.readFile(faturamento);
       const faturamentoSheet = wb.SheetNames[1];
       const ws = wb.Sheets[faturamentoSheet];
