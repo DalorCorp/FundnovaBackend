@@ -146,6 +146,8 @@ export default class RefugoServices {
       const refugoQt = await this.getRefugoQt()
       const merged = {refugoKg, refugoQt}
       console.log("refugoKg");
+      console.log("refugoKg");
+      console.log("refugoKg");
       
     return {
       type: null,
