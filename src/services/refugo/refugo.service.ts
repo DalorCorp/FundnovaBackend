@@ -168,8 +168,8 @@ export default class RefugoServices {
       const filePath = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/REFUGO/_REFUGO.xlsm');
       const workbook = XLSX.readFile(filePath);
 
-      const refugoSheet = workbook.Sheets[workbook.SheetNames[4]];
-      const producaoSheet = workbook.Sheets[workbook.SheetNames[5]];
+      const refugoSheet = workbook.Sheets["BD_REFUGO"];
+      const producaoSheet = workbook.Sheets["BD_PRODUÇÃO"];
 
       const refugoData = this.parseSheetToRefugo(refugoSheet);
       const producaoData = this.parseSheetToProducao(producaoSheet);
@@ -192,8 +192,8 @@ export default class RefugoServices {
       const filePath = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/REFUGO/_REFUGO.xlsm');
       const workbook = XLSX.readFile(filePath);
 
-      const refugoSheet = workbook.Sheets[workbook.SheetNames[4]];
-      const producaoSheet = workbook.Sheets[workbook.SheetNames[5]];
+      const refugoSheet = workbook.Sheets["BD_REFUGO"];
+      const producaoSheet = workbook.Sheets["BD_PRODUÇÃO"];
 
       const refugoData = this.parseSheetToRefugoQt(refugoSheet);
       const producaoData = this.parseSheetToProducaoQt(producaoSheet);
