@@ -3,6 +3,8 @@ import cors from "cors";
 import PagamentoRouter from "./routers/pagamento/pagamento.router";
 import FaturamentoRouter from "./routers/faturamento/faturamento.router";
 import RefugoRouter from "./routers/refugo/refugo.router";
+import fs from "fs";
+import https from "https";
 
 export default class App {
   public app: express.Express;
@@ -32,8 +34,13 @@ export default class App {
   }
 
   public start(PORT: string | number):void {
-    this.app.listen(Number(PORT), '0.0.0.0', () => {
-      console.log(`Running on port ${PORT}`);
+    const options = {
+      key: fs.readFileSync("../Certs/fundnovacloud.origus.com.br-key.pem"),
+      cert: fs.readFileSync("../Certs/fundnovacloud.origus.com.br-crt.pem"),
+      ca: fs.readFileSync("../Certs/fundnovacloud.origus.com.br-chain.pem"),
+    };
+    https.createServer(options, this.app).listen(Number(PORT), '0.0.0.0', () => {
+      console.log(`Servidor HTTPS rodando na porta ${PORT}`);
     });
   }
 }
