@@ -34,15 +34,29 @@ export default class App {
     
   }
 
-  public start(PORT: string | number):void {
-    const certsPath = path.resolve(__dirname, "../Certs");
-    const options = {
-      key: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem")),
-      cert: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-crt.pem")),
-      ca: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-chain.pem")),
-    };
+  public start(PORT: string | number): void {
+  const certsPath = path.resolve(__dirname, "../Certs");
+
+  try {
+    console.log("Lendo certificados em:", certsPath);
+
+    const key = fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem"));
+    console.log("Chave privada carregada:", key.length, "bytes");
+
+    const cert = fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-crt.pem"));
+    console.log("Certificado carregado:", cert.length, "bytes");
+
+    const ca = fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-chain.pem"));
+    console.log("CA carregado:", ca.length, "bytes");
+
+    const options = { key, cert, ca };
+
     https.createServer(options, this.app).listen(Number(PORT), '0.0.0.0', () => {
       console.log(`Servidor HTTPS rodando na porta ${PORT}`);
     });
+
+  } catch (err) {
+    console.error("Erro ao carregar certificados:", err);
   }
+}
 }
