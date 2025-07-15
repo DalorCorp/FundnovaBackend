@@ -4,8 +4,10 @@ import PagamentoRouter from "./routers/pagamento/pagamento.router";
 import FaturamentoRouter from "./routers/faturamento/faturamento.router";
 import RefugoRouter from "./routers/refugo/refugo.router";
 import fs from "fs";
-import https from "https";
 import path from "path";
+import https from "https";
+import tls from "tls";
+
 
 export default class App {
   public app: express.Express;
@@ -38,8 +40,25 @@ export default class App {
     console.log(`🟢 Lendo certificados em: ${certsPath}`);
     console.log(`🔐 Iniciando servidor HTTPS na porta ${PORT}`);
 
-    https.createServer(options, this.app).listen(Number(PORT), '0.0.0.0', () => {
-      console.log(`✅ Servidor HTTPS rodando na porta ${PORT}`);
+    const secureContext = tls.createSecureContext({
+      key: options.key,
+      cert: options.cert,
+      ca: options.ca,
     });
+
+    const serverOptions = {
+      SNICallback: (_servername: any, cb: any) => cb(null, secureContext),
+      key: options.key,
+      cert: options.cert,
+      ca: options.ca,
+    };
+
+    https.createServer(serverOptions, this.app).listen(Number(PORT), '0.0.0.0', () => {
+      console.log(`✅ Servidor HTTPS com SNI rodando na porta ${PORT}`);
+    });
+
+    // https.createServer(options, this.app).listen(Number(PORT), '0.0.0.0', () => {
+    //   console.log(`✅ Servidor HTTPS rodando na porta ${PORT}`);
+    // });
   }
 }
