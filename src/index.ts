@@ -32,10 +32,9 @@ export default class App {
   public start(PORT: string | number): void {
     const certsPath = path.resolve(__dirname, "../Certs");
     const options = {
-      key: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem")),
-      cert: fs.readFileSync(path.join(certsPath, "fullchain-combined.pem")), // combined chain
+      key: fs.readFileSync("fundnovacloud.origus.com.br-key.pem"),
+      cert: fs.readFileSync("fullchain.pem"),
     };
-
 
     console.log(`🟢 Lendo certificados em: ${certsPath}`);
     console.log(`🔐 Iniciando servidor HTTPS na porta ${PORT}`);
