@@ -31,21 +31,11 @@ export default class App {
 
   public start(PORT: string | number): void {
     const certsPath = path.resolve(__dirname, "../Certs");
-    // const options = {
-    //   key: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem")),
-    //   cert: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-crt.pem")),
-    //   ca: fs.readFileSync(path.join(certsPath, "fullchain.pem")), // R3 + ISRG Root X1
-    // };
-
     const options = {
       key: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem")),
-      cert: fs.readFileSync(path.join(certsPath, "fullchain.pem")),
+      cert: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-crt.pem")),
+      ca: fs.readFileSync(path.join(certsPath, "fullchain.pem")), // R3 + ISRG Root X1
     };
-
-    https.createServer(options, this.app).listen(Number(PORT), '0.0.0.0', () => {
-      console.log(`✅ Servidor HTTPS rodando na porta ${PORT}`);
-    });
-
 
     console.log(`🟢 Lendo certificados em: ${certsPath}`);
     console.log(`🔐 Iniciando servidor HTTPS na porta ${PORT}`);
@@ -53,7 +43,7 @@ export default class App {
     const secureContext = tls.createSecureContext({
       key: options.key,
       cert: options.cert,
-      // ca: options.ca,
+      ca: options.ca,
     });
 
     const serverOptions = {
