@@ -32,8 +32,9 @@ export default class App {
   public start(PORT: string | number): void {
     const certsPath = path.resolve(__dirname, "../Certs");
     const options = {
-      key: fs.readFileSync("fundnovacloud.origus.com.br-key.pem"),
-      cert: fs.readFileSync("fullchain.pem"),
+      key: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem")),
+      cert: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-crt.pem")),
+      ca: fs.readFileSync(path.join(certsPath, "fullchain.pem")),
     };
 
     console.log(`🟢 Lendo certificados em: ${certsPath}`);
@@ -42,7 +43,7 @@ export default class App {
     const secureContext = tls.createSecureContext({
       key: options.key,
       cert: options.cert,
-      // ca: options.ca,
+      ca: options.ca,
     });
 
     const serverOptions = {
