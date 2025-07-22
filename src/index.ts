@@ -33,7 +33,7 @@ export default class App {
     const certsPath = path.resolve(__dirname, "../Certs");
     const options = {
       key: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem")),
-      cert: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-crt.pem")),
+      cert: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-fullchain.pem")),
       ca: fs.readFileSync(path.join(certsPath, "fullchain.pem")),
     };
 
