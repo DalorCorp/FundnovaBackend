@@ -169,7 +169,7 @@ export default class RefugoServices {
       const workbook = XLSX.readFile(filePath);
 
       const refugoSheet = workbook.Sheets["BD_REFUGO"];
-      const producaoSheet = workbook.Sheets["BD_PRODUÇÃO"];
+      const producaoSheet = workbook.Sheets["BD_PRODUCAO"];
 
       const refugoData = this.parseSheetToRefugo(refugoSheet);
       const producaoData = this.parseSheetToProducao(producaoSheet);
