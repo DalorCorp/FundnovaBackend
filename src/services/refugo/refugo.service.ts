@@ -170,9 +170,10 @@ export default class RefugoServices {
 
       const refugoSheet = workbook.Sheets["BD_REFUGO"];
       const producaoSheet = workbook.Sheets["BD_PRODUCAO"];
+      const producaoSheet2 = workbook.Sheets["BD_PRODUÇÃO"];
 
       const refugoData = this.parseSheetToRefugo(refugoSheet);
-      const producaoData = this.parseSheetToProducao(producaoSheet);
+      const producaoData = this.parseSheetToProducao(producaoSheet ? producaoSheet : producaoSheet2);
 
       const merged = this.mergeByDate(refugoData, producaoData);
       const filtered = merged.filter(entry => entry.year >= 2025);
@@ -193,10 +194,11 @@ export default class RefugoServices {
       const workbook = XLSX.readFile(filePath);
 
       const refugoSheet = workbook.Sheets["BD_REFUGO"];
-      const producaoSheet = workbook.Sheets["BD_PRODUÇÃO"];
+      const producaoSheet = workbook.Sheets["BD_PRODUCAO"];
+      const producaoSheet2 = workbook.Sheets["BD_PRODUÇÃO"];
 
       const refugoData = this.parseSheetToRefugoQt(refugoSheet);
-      const producaoData = this.parseSheetToProducaoQt(producaoSheet);
+      const producaoData = this.parseSheetToProducaoQt(producaoSheet ? producaoSheet : producaoSheet2);
 
       const merged = this.mergeByDate(refugoData, producaoData);
       const filtered = merged.filter(entry => entry.year >= 2025);
