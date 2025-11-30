@@ -141,6 +141,8 @@ export default class RefugoServices {
   }
 
   async getRefugo() {
+    console.log("LOG");
+    
     try {
       const refugo = await this.getRefugoRequest()
       // const refugoQt = await this.getRefugoQt()
