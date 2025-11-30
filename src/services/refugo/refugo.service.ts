@@ -142,16 +142,13 @@ export default class RefugoServices {
 
   async getRefugo() {
     try {
-      const refugoKg = await this.getRefugoKg()
-      const refugoQt = await this.getRefugoQt()
-      const merged = {refugoKg, refugoQt}
-      console.log("batata");
-      console.log("agulha");
-      
+      const refugo = await this.getRefugoRequest()
+      // const refugoQt = await this.getRefugoQt()
+      // const merged = {refugoKg, refugoQt}
     return {
       type: null,
       status: 200,
-      message: merged
+      message: refugo
     };
   } catch (error) {
     console.error("Error processing Excel file:", error);
@@ -163,19 +160,29 @@ export default class RefugoServices {
   }
 }
   
-  async getRefugoKg() {
+  async getRefugoRequest() {
     try {
       const filePath = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/REFUGO/_REFUGO.xlsm');
       const workbook = XLSX.readFile(filePath);
 
-      const refugoSheet = workbook.Sheets["BD_REFUGO"];
-      const producaoSheet = workbook.Sheets["BD_PRODUÇÃO"];
+      const refugoSheetKg = workbook.Sheets["BD_REFUGO"];
+      const producaoSheetKg = workbook.Sheets["BD_PRODUÇÃO"];
 
-      const refugoData = this.parseSheetToRefugo(refugoSheet);
-      const producaoData = this.parseSheetToProducao(producaoSheet);
+      const refugoSheetQt = workbook.Sheets["BD_REFUGO"];
+      const producaoSheetQt = workbook.Sheets["BD_PRODUÇÃO"];
 
-      const merged = this.mergeByDate(refugoData, producaoData);
-      const filtered = merged.filter(entry => entry.year >= 2025);
+      const refugoDataKg = this.parseSheetToRefugo(refugoSheetKg);
+      const producaoDataKg = this.parseSheetToProducao(producaoSheetKg);
+
+      const refugoDataQt = this.parseSheetToRefugoQt(refugoSheetQt);
+      const producaoDataQt = this.parseSheetToProducaoQt(producaoSheetQt);
+
+      const mergedKg = this.mergeByDate(refugoDataKg, producaoDataKg);
+      const mergedQt = this.mergeByDate(refugoDataQt, producaoDataQt);
+
+      const filteredKg = mergedKg.filter(entry => entry.year >= 2025);
+      const filteredQt = mergedQt.filter(entry => entry.year >= 2025);
+      const filtered = {filteredKg, filteredQt}
       return filtered;
     } catch (error) {
       console.error("Error processing Excel file:", error);
