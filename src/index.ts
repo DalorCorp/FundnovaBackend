@@ -4,60 +4,59 @@ import PagamentoRouter from "./routers/pagamento/pagamento.router";
 import FaturamentoRouter from "./routers/faturamento/faturamento.router";
 import RefugoRouter from "./routers/refugo/refugo.router";
 import fs from "fs";
-import https from "https";
 import path from "path";
+import https from "https";
 import tls from "tls";
+
 
 export default class App {
   public app: express.Express;
 
   constructor () {
-    this.app = express ();
+    this.app = express();
     this.config();
+    this.routes();
+  }
 
+  private config(): void {
+    this.app.use(cors());
+    this.app.use(express.json());
+  }
+
+  private routes(): void {
     this.app.use("/pagamento", PagamentoRouter);
     this.app.use("/faturamento", FaturamentoRouter);
     this.app.use("/refugo", RefugoRouter);
   }
 
-  private config():void {
-    this.app.use(cors());
-    
-    // const accessControl: express.RequestHandler = (_req, res, next) => {
-    //   res.header("Access-Control-Allow-Origin", "*");
-    //   res.header("Access-Control-Allow-Methods", "GET,POST,DELETE,OPTIONS,PUT,PATCH");
-    //   res.header("Access-Control-Allow-Headers", "*");
-    //   next();
-    // };
-    // this.app.use(accessControl);
-
-    this.app.use(express.json());
-    
-  }
-
   public start(PORT: string | number): void {
-  const certsPath = path.resolve(__dirname, "../Certs");
+    const certsPath = path.resolve(__dirname, "../Certs");
+    const options = {
+      key: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem")),
+      cert: fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-fullchain.pem")),
+      ca: fs.readFileSync(path.join(certsPath, "fullchain.pem")),
+    };
 
-  try {
-    console.log("Lendo certificados em:", certsPath);
+    console.log(`🟢 Lendo certificados em: ${certsPath}`);
+    console.log(`🔐 Iniciando servidor HTTPS na porta ${PORT}`);
 
-    const key = fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-key.pem"));
-    console.log("Chave privada carregada:", key.length, "bytes");
-
-    const cert = fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-crt.pem"));
-    console.log("Certificado carregado:", cert.length, "bytes");
-
-    const ca = fs.readFileSync(path.join(certsPath, "fundnovacloud.origus.com.br-chain.pem"));
-    console.log("CA carregado:", ca.length, "bytes");
-
-    const options = { key, cert, ca };
-
-    https.createServer(options, this.app).listen(Number(PORT), '0.0.0.0', () => {
-      console.log(`Servidor HTTPS rodando na porta ${PORT}`);
+    const secureContext = tls.createSecureContext({
+      key: options.key,
+      cert: options.cert,
+      ca: options.ca,
     });
 
-  } catch (err) {
-    console.error("Erro ao carregar certificados:", err);
+    const serverOptions = {
+      ...options,
+      SNICallback: (_servername: string, cb: Function) => cb(null, secureContext),
+    };
+
+    https.createServer(serverOptions, this.app).listen(Number(PORT), '0.0.0.0', () => {
+      console.log(`✅ Servidor HTTPS com SNI rodando na porta ${PORT}`);
+    });
+
+    // https.createServer(options, this.app).listen(Number(PORT), '0.0.0.0', () => {
+    //   console.log(`✅ Servidor HTTPS rodando na porta ${PORT}`);
+    // });
   }
-}
 }
