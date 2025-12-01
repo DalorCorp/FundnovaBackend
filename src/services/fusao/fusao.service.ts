@@ -29,14 +29,7 @@ export default class FusaoServices {
     try {
       const fusao = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/FUSÃO/_FOLHA DE FUSÃO.xlsm');
       const wb = XLSX.readFile(fusao);
-      // const fusaoSheet = wb.SheetNames["BD (2)"];
-
-      const fusaoSheet = wb.SheetNames.find((name: any) => name === "BD (2)");
-
-      if (!fusaoSheet) {
-        throw new Error("Sheet 'BD (2)' not found");
-      }
-
+      const fusaoSheet = wb.SheetNames[2];
       
       const ws = wb.Sheets[fusaoSheet];
   
