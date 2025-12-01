@@ -41,7 +41,7 @@ export default class FusaoServices {
   
       const headerRowIndex = 1;
   
-      const data = XLSX.utils.sheet_to_json(ws, { range: headerRowIndex, defval: null });
+      const data = XLSX.utils.sheet_to_json(ws, { range: headerRowIndex, defval: null }) as any[];
 
       console.log("Headers:", Object.keys(data[0] || {}));
 
