@@ -16,29 +16,34 @@ export default class RefugoServices {
 
   async getRefugo() {
     console.log("LOOOOOOOOOOG-------------------------2");
-    
+
     try {
       const file = path.join(
         "C:/Arquivos Fundnova/INDUSTRIAL/Pública/REFUGO/_REFUGO.xlsm"
       );
 
-      // LOAD FILE (slow part)
+      // LOAD XLSM FILE
       const wb = XLSX.readFile(file);
 
-      // LOAD EACH SHEET ONLY ONCE (huge speed gain)
+      // LOAD SHEETS (supports both names)
       const refugoSheet = wb.Sheets["BD_REFUGO"];
-      const producaoSheet = wb.Sheets["BD_PRODUÇÃO"];
+      const producaoSheet =
+        wb.Sheets["BD_PRODUÇÃO"] || wb.Sheets["BD_PRODUCAO"];
 
+      if (!refugoSheet) throw new Error("Sheet BD_REFUGO not found");
+      if (!producaoSheet) throw new Error("Sheet BD_PRODUÇÃO / BD_PRODUCAO not found");
+
+      // Read rows
       const refugoRows = XLSX.utils.sheet_to_json(refugoSheet, { defval: 0 });
-      const producaoRows = XLSX.utils.sheet_to_json(producaoSheet, { defval: 0 });
+      const producaoRows = XLSX.utils.sheet_to_json(producaoSheet, { defval: null });
 
       const map = new Map<string, any>();
 
       const makeKey = (y: number, m: string, d: number) => `${y}-${m}-${d}`;
 
-      // --------------------------
-      // REFUGO (both KG + QT)
-      // --------------------------
+      // ---------------------------------------------------------
+      // REFUGO (KG + QT)
+      // ---------------------------------------------------------
       for (const row of refugoRows as any[]) {
         const date = this.excelDateToJSDate(row["DT_FUSÃO"]);
         if (!date) continue;
@@ -65,9 +70,9 @@ export default class RefugoServices {
         item.qt += Number(row["QTE_REF"] || 0);
       }
 
-      // --------------------------
+      // ---------------------------------------------------------
       // PRODUÇÃO (KG + QT)
-      // --------------------------
+      // ---------------------------------------------------------
       for (const row of producaoRows as any[]) {
         const date = this.excelDateToJSDate(row["DT_FUSÃO"]);
         if (!date) continue;
@@ -90,12 +95,17 @@ export default class RefugoServices {
         }
 
         const item = map.get(k);
+
+        // VERY IMPORTANT – these columns HAVE SPACES!
         item.produzidoKg += Number(row[" KG_TT "] || 0);
+
         item.produzidoQt += Number(row["QTE_PÇ"] || 0);
       }
 
-      const final = Array.from(map.values());
+      // FINAL ARRAY
+      const final = Array.from(map.values()).filter(e => e.year >= 2025);
 
+      // Sort newest → oldest
       final.sort((a, b) => {
         if (b.year !== a.year) return b.year - a.year;
         if (a.month !== b.month)
