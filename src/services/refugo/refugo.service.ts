@@ -15,7 +15,7 @@ export default class RefugoServices {
   };
 
   async getRefugo() {
-    console.log("LOOOOOOOOOOG-------------------------");
+    console.log("LOOOOOOOOOOG-------------------------2");
     
     try {
       const file = path.join(
@@ -69,7 +69,7 @@ export default class RefugoServices {
       // PRODUÇÃO (KG + QT)
       // --------------------------
       for (const row of producaoRows as any[]) {
-        const date = this.excelDateToJSDate(row["DT_PRODUÇÃO"]);
+        const date = this.excelDateToJSDate(row["DT_FUSÃO"]);
         if (!date) continue;
 
         const [y, m, d] = date.split("-");
