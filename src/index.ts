@@ -3,11 +3,11 @@ import cors from "cors";
 import PagamentoRouter from "./routers/pagamento/pagamento.router";
 import FaturamentoRouter from "./routers/faturamento/faturamento.router";
 import RefugoRouter from "./routers/refugo/refugo.router";
+import FusaoRouter from "./routers/fusao/fusao.router";
 import fs from "fs";
 import path from "path";
 import https from "https";
 import tls from "tls";
-import FusaoRouter from "./routers/fusao/fusao.router";
 
 
 export default class App {
