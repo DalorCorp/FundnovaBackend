@@ -48,7 +48,7 @@ export default class FusaoServices {
   
       const filteredData = data
         .filter((row: any) =>
-          row["DATA"] && row["CARVÃO"] != null // && row[" R$ "] != null && row["R$/KG"] != null
+          row["DATA"] && row[" CARVÃO "] != null // && row[" R$ "] != null && row["R$/KG"] != null
         )
         .map((row: any) => {
           const fullDate = this.excelDateToJSDate(row["DATA"]);
@@ -58,7 +58,7 @@ export default class FusaoServices {
             year: parseInt(year),
             month: this.monthNames[parseInt(month) - 1],
             day: parseInt(day),
-            qt: row["CARVÃO"],
+            qt: row[" CARVÃO "],
             // price: row[" R$ "],
             // result: row["R$/KG"]
           };
