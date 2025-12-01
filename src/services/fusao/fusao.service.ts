@@ -30,6 +30,12 @@ export default class FusaoServices {
       const fusao = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/FUSÃO/_FOLHA DE FUSÃO.xlsm');
       const wb = XLSX.readFile(fusao);
       const fusaoSheet = wb.SheetNames[2];
+      console.log("0 ", wb.SheetNames[0]);
+      console.log("1 ", wb.SheetNames[1]);
+      console.log("2 ", wb.SheetNames[2]);
+      console.log("3 ", wb.SheetNames[3]);
+      console.log("4 ", wb.SheetNames[4]);
+      
       
       const ws = wb.Sheets[fusaoSheet];
   
