@@ -15,6 +15,8 @@ export default class RefugoServices {
   };
 
   async getRefugo() {
+    console.log("LOOOOOOOOOOG-------------------------");
+    
     try {
       const file = path.join(
         "C:/Arquivos Fundnova/INDUSTRIAL/Pública/REFUGO/_REFUGO.xlsm"
@@ -67,7 +69,7 @@ export default class RefugoServices {
       // PRODUÇÃO (KG + QT)
       // --------------------------
       for (const row of producaoRows as any[]) {
-        const date = this.excelDateToJSDate(row["DT_FUSÃO"]);
+        const date = this.excelDateToJSDate(row["DT_PRODUÇÃO"]);
         if (!date) continue;
 
         const [y, m, d] = date.split("-");
