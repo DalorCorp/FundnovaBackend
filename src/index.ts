@@ -7,6 +7,7 @@ import fs from "fs";
 import path from "path";
 import https from "https";
 import tls from "tls";
+import FusaoRouter from "./routers/fusao/fusao.router";
 
 
 export default class App {
@@ -27,6 +28,7 @@ export default class App {
     this.app.use("/pagamento", PagamentoRouter);
     this.app.use("/faturamento", FaturamentoRouter);
     this.app.use("/refugo", RefugoRouter);
+    this.app.use("/fusao", FusaoRouter);
   }
 
   public start(PORT: string | number): void {
