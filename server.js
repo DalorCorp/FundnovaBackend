@@ -3,7 +3,7 @@ const fs = require('fs'); // Import the fs (File System) module
 const path = require('path'); // Import the path module
 
 // Define the path to the Excel file
-const pagamento = 'C:/Arquivos Fundnova/INDUSTRIAL/Pública/FATURAMENTO/PAGAMENTO.xlsx';
+const pagamento = 'K:/SGQFSCL/0.0 - SGE-Sistema de Gestão Empresarial/RQ 168 - Gestão da Ordens de Serviços - FSCL - Rev A - 221025.xlsx';
 // const pagamento = 'D:/App/AdventureForge/PAGAMENTO.xlsx';
 
 // Read the Excel file from the given path
@@ -13,7 +13,7 @@ const readExcelFile = (pagamento) => {
     const wb = XLSX.readFile(pagamento);
 
     // Get the first sheet name
-    const sheetName = wb.SheetNames[0];
+    const sheetName = wb.SheetNames[2];
     
     // Get the first sheet data
     const ws = wb.Sheets[sheetName];

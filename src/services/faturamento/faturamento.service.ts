@@ -27,10 +27,16 @@ export default class FaturamentoServices {
 
   async getFaturamento() {
     try {
-      const faturamento = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/FATURAMENTO/FATURAMENTO DIÁRIO.xlsx');
+      // const faturamento = path.join('C:/Arquivos Fundnova/INDUSTRIAL/Pública/FATURAMENTO/FATURAMENTO DIÁRIO.xlsx');
+      const faturamento = path.join('K:/SGQFSCL/0.0 - SGE-Sistema de Gestão Empresarial/RQ 168 - Gestão da Ordens de Serviços - FSCL - Rev A - 221025.xlsx');
       const wb = XLSX.readFile(faturamento);
       const faturamentoSheet = wb.SheetNames[1];
       const ws = wb.Sheets[faturamentoSheet];
+
+      console.log("wb: ", wb);
+      console.log("faturamentoSheet: ", faturamentoSheet);
+      console.log("ws: ", ws);
+      
   
       const headerRowIndex = 1;
   
