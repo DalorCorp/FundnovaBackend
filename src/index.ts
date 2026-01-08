@@ -22,6 +22,7 @@ export default class App {
   private config(): void {
     this.app.use(cors());
     this.app.use(express.json());
+    this.app.use('/.well-known', express.static(path.join(__dirname, '../c2/.well-known')));
   }
 
   private routes(): void {

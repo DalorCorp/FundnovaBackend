@@ -59,6 +59,37 @@ export default class FusaoServices {
             month: this.monthNames[parseInt(month) - 1],
             day: parseInt(day),
             qt: row[" CARVÃO "],
+
+            // 0|fundnova-backend  | Headers: [
+            // 0|fundnova-backend  |   'FUSÃO',
+            // 0|fundnova-backend  |   'DATA',
+            // 0|fundnova-backend  |   'INÍCIO',
+            // 0|fundnova-backend  |   'FINAL',
+            // 0|fundnova-backend  |   'QTE CARGA',
+            // 0|fundnova-backend  |   ' PÉ (CARBONO) ',
+            // 0|fundnova-backend  |   ' PÉ (CARVÃO) ',
+            // 0|fundnova-backend  |   ' REFORÇO (CARVÃO) ',
+            // 0|fundnova-backend  |   ' REFORÇO (CARBONO) ',
+            // 0|fundnova-backend  |   ' CARVÃO ',
+            // 0|fundnova-backend  |   ' CARBONO ',
+            // 0|fundnova-backend  |   ' CARBONO MACIO ',
+            // 0|fundnova-backend  |   ' CALCÁRIO ',
+            // 0|fundnova-backend  |   ' SILÍCIO ',
+            // 0|fundnova-backend  |   ' SUCATA AUTOMOTIVA ',
+            // 0|fundnova-backend  |   ' SUCATA RESPINGO ',
+            // 0|fundnova-backend  |   ' SUCATA CANAL ',
+            // 0|fundnova-backend  |   ' CANAL P/ ESFRIAR METAL ',
+            // 0|fundnova-backend  |   ' SUCATA GUSA ',
+            // 0|fundnova-backend  |   ' SUCATA COQUILHA ',
+            // 0|fundnova-backend  |   ' RETORNO SUCATA ',
+            // 0|fundnova-backend  |   ' RETORNO CARBONO ',
+            // 0|fundnova-backend  |   ' PESO TOTAL ',
+            // 0|fundnova-backend  |   'DIA',
+            // 0|fundnova-backend  |   'MÊS ',
+            // 0|fundnova-backend  |   'ANO'
+            // 0|fundnova-backend  | ]
+              
+
             // price: row[" R$ "],
             // result: row["R$/KG"]
           };
