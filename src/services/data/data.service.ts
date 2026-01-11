@@ -15,6 +15,34 @@ export default class DataServices {
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
+
+  private monthAbbrevToNumber(month: string): number | null {
+    if (!month) return null;
+  
+    const map: Record<string, number> = {
+      JAN: 1,
+      FEV: 2,
+      MAR: 3,
+      ABR: 4,
+      MAI: 5,
+      JUN: 6,
+      JUL: 7,
+      AGO: 8,
+      SET: 9,
+      OUT: 10,
+      NOV: 11,
+      DEZ: 12
+    };
+  
+    const key = month
+      .toUpperCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "")
+      .slice(0, 3);
+  
+    return map[key] ?? null;
+  }
+
   private excelDateToJSDate(serial: number): string | null {
     if (!serial || isNaN(serial) || serial < 0) return null;
     const excelStartDate = new Date(1899, 11, 30);
@@ -369,7 +397,7 @@ export default class DataServices {
 
           return {
             year: Number(row["ANO"]),
-            month: this.monthNames[Number(row["MÊS"]) - 1],
+            month: this.monthAbbrevToNumber(row["MÊS"]),
             day: Number(row["DIA"]),
             liquidez: Number(liquidez.toFixed(2)),
             dinheiro: Number(dinheiro.toFixed(2))
