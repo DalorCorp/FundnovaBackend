@@ -387,8 +387,7 @@ export default class DataServices {
       return {
         type: null,
         status: 200,
-        message: "OK",
-        data: result
+        message: result,
       };
     } catch (error) {
       console.error("Error reading Excel file:", error);
