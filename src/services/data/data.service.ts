@@ -336,21 +336,7 @@ export default class DataServices {
       const file = path.join('C:/Arquivos Fundnova/FINANCEIRO/Particular/RELATÓRIO GERENCIAL/ANALISE FINANCEIRA DIÁRIA.xlsx');
       const wb = XLSX.readFile(file);
       const sheet = wb.SheetNames[0];
-      const ws = wb.Sheets[sheet];
-
-      const bebe = wb.SheetNames
-
-      console.log("Sheet names:", wb.SheetNames);
-
-      const headers = XLSX.utils.sheet_to_json(ws, {
-        header: 1,
-        range: 0
-      })[0];
-      
-      console.log("Headers:", headers);
-
-      const alala = {bebe, headers}
-  
+      const ws = wb.Sheets[sheet];  
       const headerRowIndex = 1;
   
       const data = XLSX.utils.sheet_to_json(ws, { range: headerRowIndex, defval: null });
@@ -402,7 +388,7 @@ export default class DataServices {
       return {
         type: null,
         status: 200,
-        message: {alala, result},
+        message: result,
       };
     } catch (error) {
       console.error("Error reading Excel file:", error);
