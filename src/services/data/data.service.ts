@@ -351,13 +351,15 @@ export default class DataServices {
 
       const alala = {bebe, headers}
   
-      const headerRowIndex = 2;
+      const headerRowIndex = 1;
   
       const data = XLSX.utils.sheet_to_json(ws, { range: headerRowIndex, defval: null });
   
       const result = data
         .filter((row: any) =>
-          row["DATA"] && row[" KG "] != null && row[" R$ "] != null && row["R$/KG"] != null
+          row["DIA"] !== null &&
+          row["MÊS"] !== null &&
+          row["ANO"] !== null
         )
         .map((row: any) => {
           const entradasParaLiquidez =
