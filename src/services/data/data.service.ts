@@ -351,7 +351,7 @@ export default class DataServices {
 
       const alala = {bebe, headers}
   
-      const headerRowIndex = 1;
+      const headerRowIndex = 2;
   
       const data = XLSX.utils.sheet_to_json(ws, { range: headerRowIndex, defval: null });
   
@@ -400,7 +400,7 @@ export default class DataServices {
       return {
         type: null,
         status: 200,
-        message: alala,
+        message: {alala, result},
       };
     } catch (error) {
       console.error("Error reading Excel file:", error);
