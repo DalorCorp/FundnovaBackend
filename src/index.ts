@@ -8,7 +8,7 @@ import fs from "fs";
 import path from "path";
 import https from "https";
 import tls from "tls";
-
+import DataRouter from "./routers/data/data.router";
 
 export default class App {
   public app: express.Express;
@@ -30,6 +30,7 @@ export default class App {
     this.app.use("/faturamento", FaturamentoRouter);
     this.app.use("/refugo", RefugoRouter);
     this.app.use("/fusao", FusaoRouter);
+    this.app.use("/data", DataRouter);
   }
 
   public start(PORT: string | number): void {
@@ -57,9 +58,5 @@ export default class App {
     https.createServer(serverOptions, this.app).listen(Number(PORT), '0.0.0.0', () => {
       console.log(`✅ Servidor HTTPS com SNI rodando na porta ${PORT}`);
     });
-
-    // https.createServer(options, this.app).listen(Number(PORT), '0.0.0.0', () => {
-    //   console.log(`✅ Servidor HTTPS rodando na porta ${PORT}`);
-    // });
   }
 }

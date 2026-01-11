@@ -54,7 +54,7 @@ export default class FaturamentoServices {
           };
         });
   
-      filteredData.sort((a, b) => {
+      filteredData.sort((a: any, b: any) => {
         const yearDiff = (b.year ?? 0) - (a.year ?? 0);
         if (yearDiff !== 0) return yearDiff;
   
