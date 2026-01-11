@@ -337,7 +337,7 @@ export default class DataServices {
       const wb = XLSX.readFile(file);
       const sheet = wb.SheetNames[0];
       const ws = wb.Sheets[sheet];  
-      const headerRowIndex = 1;
+      const headerRowIndex = 0;
   
       const data = XLSX.utils.sheet_to_json(ws, { range: headerRowIndex, defval: null });
   
