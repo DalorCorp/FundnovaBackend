@@ -337,6 +337,19 @@ export default class DataServices {
       const wb = XLSX.readFile(file);
       const sheet = wb.SheetNames[0];
       const ws = wb.Sheets[sheet];
+
+      const bebe = wb.SheetNames
+
+      console.log("Sheet names:", wb.SheetNames);
+
+      const headers = XLSX.utils.sheet_to_json(ws, {
+        header: 1,
+        range: 0
+      })[0];
+      
+      console.log("Headers:", headers);
+
+      const alala = {bebe, headers}
   
       const headerRowIndex = 1;
   
@@ -387,7 +400,7 @@ export default class DataServices {
       return {
         type: null,
         status: 200,
-        message: result,
+        message: alala,
       };
     } catch (error) {
       console.error("Error reading Excel file:", error);
