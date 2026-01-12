@@ -15,7 +15,6 @@ export default class DataServices {
     "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"
   ];
 
-
   private monthAbbrevToNumber(month: string): string | null {
     if (!month) return null;
   
@@ -267,7 +266,7 @@ export default class DataServices {
         const yearDiff = (b.year ?? 0) - (a.year ?? 0);
         if (yearDiff !== 0) return yearDiff;
   
-        const monthDiff = this.monthNames.indexOf(b.month) - this.monthNames.indexOf(a.month);
+        const monthDiff = this.monthNames.indexOf(a.month) - this.monthNames.indexOf(b.month);
         if (monthDiff !== 0) return monthDiff;
   
         return (b.day ?? 0) - (a.day ?? 0);
@@ -405,12 +404,13 @@ export default class DataServices {
         });
 
       result.sort((a: any, b: any) => {
-        if (b.year !== a.year) return b.year - a.year;
-        if (b.month !== a.month) {
-          return this.monthNames.indexOf(b.month) -
-                this.monthNames.indexOf(a.month);
-        }
-        return b.day - a.day;
+        const yearDiff = (b.year ?? 0) - (a.year ?? 0);
+        if (yearDiff !== 0) return yearDiff;
+  
+        const monthDiff = this.monthNames.indexOf(a.month) - this.monthNames.indexOf(b.month);
+        if (monthDiff !== 0) return monthDiff;
+  
+        return (b.day ?? 0) - (a.day ?? 0);
       });
 
       return {
